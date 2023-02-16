@@ -1,0 +1,47 @@
+.menu{
+    width: 360px;
+    display: flex;
+    justify-content: center;
+    padding-bottom: 10px;
+
+    font-size: 20px;
+}
+
+.step_back{
+    width: 23px;
+    height: 23px;
+
+
+    align-self: flex-end;
+
+    background-image: url("./img/стрелка.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+    transform: rotate(180deg);
+}
+
+.step_back:hover{
+    cursor: pointer;
+}
+
+.step_next{
+    width: 23px;
+    height: 23px;
+
+
+    align-self: flex-end;
+
+    background-image: url("./img/стрелка.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+.step_next:hover{
+    cursor: pointer;
+}
+
+
+.year{
+    margin-left: 10px;
+}
+

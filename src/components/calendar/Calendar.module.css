@@ -1,0 +1,61 @@
+body{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.calendar{
+    height: auto;
+    width: 400px;
+    background: rgb(187, 249, 252);
+    padding: 5px 5px 0px 5px;
+
+    display: grid;
+    grid-template-columns: repeat(7, 50px);
+    justify-content: space-between;
+
+    text-align: center;
+}
+
+.calendar__weeksDay_name{
+    background-color: #00ff8c;
+}
+
+.calendar__weeksDay_item{
+    margin-top: 5px;
+    background-color: rgb(0, 255, 213);
+
+}
+
+.color_turquoise{
+    background-color: #00FFD5;
+}
+
+.color_lBlue{
+    background-color: #34bbd7;
+}
+
+.numMonth{
+    display: none;
+}
+
+.select{
+    background-color: #ff0404;
+}
+.select_range{
+    background-color: #de7a7a;
+}
+
+.holiday{
+    background-image: url("./star.png");
+    background-size:auto 100% ;
+    background-position: center;
+    background-repeat: no-repeat
+}
+
+.discr_holid{
+    position: absolute;
+    color: rgb(0, 0, 0);
+    background-color: antiquewhite;
+}
