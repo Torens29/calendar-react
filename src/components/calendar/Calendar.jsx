@@ -4,26 +4,26 @@ import cn from "classnames";
 import { Menu } from "../Menu/Menu";
 const equal = require("fast-deep-equal");
 
-const holiday = {
-    1.1: "Новый год",
-    7.1: "Рождество Христово",
-    14.1: "Старый Новый год",
-    19.1: "Крещение Господне",
-    25.1: "Татьянин день (день студента)",
-    31.1: "Международный день ювелира	 ",
-    2.2: "День сурка",
-    8.2: "День российской науки",
-    13.2: "Всемирный день радио",
-    14.2: "День святого Валентина (день всех влюбленных)",
-    15.2: "Сретение Господне",
-    23.2: "День защитника Отечества",
-    8.3: "Международный женский день",
-    27.3: "День МВД",
-    "01.4": "День смеха",
-    22.4: "Международный день Земли",
-    24.4: "	День секретаря	 ",
-    "01.5": "День весны и труда",
-};
+// const holiday = {
+//     1.1: "Новый год",
+//     7.1: "Рождество Христово",
+//     14.1: "Старый Новый год",
+//     19.1: "Крещение Господне",
+//     25.1: "Татьянин день (день студента)",
+//     31.1: "Международный день ювелира	 ",
+//     2.2: "День сурка",
+//     8.2: "День российской науки",
+//     13.2: "Всемирный день радио",
+//     14.2: "День святого Валентина (день всех влюбленных)",
+//     15.2: "Сретение Господне",
+//     23.2: "День защитника Отечества",
+//     8.3: "Международный женский день",
+//     27.3: "День МВД",
+//     "01.4": "День смеха",
+//     22.4: "Международный день Земли",
+//     24.4: "	День секретаря	 ",
+//     "01.5": "День весны и труда",
+// };
 
 const Day = ({ className, children, fClick, id, enterMouse, exitMouse }) => {
     return (
@@ -46,6 +46,21 @@ const formatterRange = new Intl.DateTimeFormat("en", {
 });
 
 export const Calendar = () => {
+    const [holiday, setHoliday] = useState([]);
+
+    useEffect(() => {
+        (async () => {
+            await fetch("https://date.nager.at/api/v3/publicholidays/2023/RU")
+                .then((response) => {
+                    return response.json();
+                })
+                .then((data) => {
+                    console.log(data);
+                    setHoliday(data);
+                });
+        })();
+    }, []);
+
     const [date, setDate] = useState(new Date());
     const [selectRange, setSelectRange] = useState({
         firstDay: undefined,
@@ -89,22 +104,6 @@ export const Calendar = () => {
         });
     };
 
-    // useEffect(() => {
-    //     (async () => {
-    //         await fetch("https://htmlweb.ru/service/api.php?holiday&private=0", {
-    //             mode: "no-cors",
-    //             method: "post",
-    //             headers: {
-    //                 "Content-Type": "application/json",
-    //                  "Access-Control-Allow-Origin": '*',
-    //                  "Access-Control-Allow-Credentials" : true
-    //             },
-    //         })
-    //             .then((response) => response.json())
-    //             .then((data) => console.log("This is your data", data));
-    //     })();
-    // }, []);
-
     let day = 0;
 
     const flag =
@@ -141,11 +140,41 @@ export const Calendar = () => {
 
     const displayDiscHol = useCallback(
         (e) => {
+            console.log(
+                holiday.filter(
+                    (el) =>
+                        el.date ===
+                        `${date.getFullYear()}-${
+                            (date.getMonth() + 1).toString().length === 1
+                                ? "0" + (date.getMonth() + 1)
+                                : date.getMonth() + 1
+                        }-${
+                            e.target.innerHTML.length === 1
+                                ? "0" + e.target.innerHTML
+                                : e.target.innerHTML
+                        }`
+                )[0]?.localName
+            );
+
             if (e.target.classList.contains(styles.holiday)) {
-                setDiskHolid(holiday[e.target.innerHTML + "." + (date.getMonth() + 1)]);
+                setDiskHolid(
+                    holiday.filter(
+                        (el) =>
+                            el.date ===
+                            `${date.getFullYear()}-${
+                                (date.getMonth() + 1).toString().length === 1
+                                    ? "0" + (date.getMonth() + 1)
+                                    : date.getMonth() + 1
+                            }-${
+                                e.target.innerHTML.length === 1
+                                    ? "0" + e.target.innerHTML
+                                    : e.target.innerHTML
+                            }`
+                    )[0]?.localName
+                );
             }
         },
-        [date]
+        [date, holiday]
     );
 
     const hiddenDiscHol = useCallback(() => {
@@ -204,8 +233,19 @@ export const Calendar = () => {
                                         new Date(date.getFullYear(), date.getMonth(), day + 1) &&
                                     styles.select_range,
 
-                                holiday[day + 1 + "." + (date.getMonth() + 1)] !== undefined &&
-                                    styles.holiday
+                                holiday.filter(
+                                    (el) =>
+                                        el.date ===
+                                        `${date.getFullYear()}-${
+                                            (date.getMonth() + 1).toString().length === 1
+                                                ? "0" + (date.getMonth() + 1)
+                                                : date.getMonth() + 1
+                                        }-${
+                                            (day + 1).toString().length === 1
+                                                ? "0" + (day + 1).toString()
+                                                : (day + 1).toString()
+                                        }`
+                                )[0]?.localName !== undefined && styles.holiday
                             )}
                             key={i}
                             id={i}
